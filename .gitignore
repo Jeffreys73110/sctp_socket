@@ -3,7 +3,7 @@
 
 ### develop
 build
-sctp_socket
+sctp_dev
 
 ### C++ ###
 # Prerequisites

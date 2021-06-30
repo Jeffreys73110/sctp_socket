@@ -19,7 +19,7 @@ ubuntu 18.04
 
 * execute the program
 	```
-	./sctp_socket
+	./sctp_dev
 	```
 
 * clean useless things

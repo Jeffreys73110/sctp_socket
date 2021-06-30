@@ -20,7 +20,7 @@ DIR_BUILD := build
 DIR_SRC := src
 DIR_MOD := $(DIR_SRC)/module
 DIR_DEV := $(DIR_SRC)/dev
-DEV_LINK_TARGET := sctp_socket
+DEV_LINK_TARGET := sctp_dev
 SYS_LIBS := -lpthread -lsctp
 
 ## modules
