@@ -140,18 +140,21 @@ int start_sctp_server(int &fd, char *ip, unsigned short port, sctp_event_subscri
 	if (bind(fd, (sockaddr *)&sin, sizeof(sin)) < 0)
 	{
 		perror("[start_sctp_server] bind fail: ");
+		close(fd);
 		return -3;
 	}
 
 	if (listen(fd, 1) < 0)
 	{
 		perror("[start_sctp_server] listen fail: ");
+		close(fd);
 		return -4;
 	}
 
 	if (subscribe_sctp_event(fd, NULL) < 0)
 	{
 		printf("[start_sctp_server] subscribe sctp event fail, socket=%d\n", fd);
+		close(fd);
 		return -5;
 	}
 
@@ -200,8 +203,7 @@ int start_sctp_client(int &fd, struct sockaddr_in *addr)
 	initmsg.sinit_num_ostreams = MAX_STREAM;
 	initmsg.sinit_max_instreams = MAX_STREAM;
 	initmsg.sinit_max_attempts = MAX_STREAM;
-	ret = setsockopt(fd, IPPROTO_SCTP, SCTP_INITMSG, &initmsg,
-					 sizeof(struct sctp_initmsg));
+	ret = setsockopt(fd, IPPROTO_SCTP, SCTP_INITMSG, &initmsg, sizeof(struct sctp_initmsg));
 	if (ret < 0)
 	{
 		perror("[start_sctp_client] setsockopt SCTP_INITMSG");
@@ -213,8 +215,7 @@ int start_sctp_client(int &fd, struct sockaddr_in *addr)
 	initmsg.sinit_num_ostreams = MAX_STREAM;
 	initmsg.sinit_max_instreams = MAX_STREAM;
 	initmsg.sinit_max_attempts = MAX_STREAM;
-	ret = setsockopt(fd, IPPROTO_SCTP, SCTP_INITMSG, &initmsg,
-					 sizeof(struct sctp_initmsg));
+	ret = setsockopt(fd, IPPROTO_SCTP, SCTP_INITMSG, &initmsg, sizeof(struct sctp_initmsg));
 	if (ret < 0)
 	{
 		perror("[start_sctp_client] setsockopt SCTP_INITMSG");
@@ -230,6 +231,7 @@ int start_sctp_client(int &fd, struct sockaddr_in *addr)
 	}
 
 	printf("[start_sctp_client] start sctp client successfully, socket=%d, connected to %s:%d\n", fd, inet_ntoa(addr->sin_addr), ntohs(addr->sin_port));
+	return 0;
 }
 
 void dump_sctp_event(void *buf)
